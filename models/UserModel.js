@@ -4,38 +4,36 @@ import db from "../config/database.js";
 const { DataTypes } = Sequelize;
 
 const User = db.define('users', {
-    name:{
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    username:{
+    username: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    email:{
+    email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        validate:{
+        validate: {
             isEmail: true
         }
     },
-    password:{
+    password: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    role:{
+    role: {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'user'
     },
-    resetPasswordToken:{
+    resetPasswordToken: {
         type: DataTypes.STRING,
-        allowNull: true
     },
     resetPasswordExpires: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: DataTypes.DATE,
     }
 }, {
     freezeTableName: true
