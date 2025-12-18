@@ -6,7 +6,7 @@ export const getAllUsers = async (req, res) => {
         const users = await User.findAll({
             attributes: ['id', 'name', 'username', 'email', 'role']
         });
-        res.status(200).json(user);
+        res.status(200).json(users);
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
