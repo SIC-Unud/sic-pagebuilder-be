@@ -3,7 +3,6 @@ import Component from "./ComponentModel.js";
 import Project from "./ProjectModel.js";
 import ProjectComponent from "./ProjectComponentModel.js";
 
-// Definisi Relasi
 User.hasMany(Project, { foreignKey: 'user_id' });
 Project.belongsTo(User, { foreignKey: 'user_id' });
 

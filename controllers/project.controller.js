@@ -1,14 +1,11 @@
 import Project from '../models/ProjectModel.js';
 
-// --- CREATE PROJECT (Dari Galang, tapi diperbaiki) ---
 export const createProject = async(req, res) => {
-    // Frontend mungkin mengirim 'projectName' atau 'project_name'
     const { projectName, project_name } = req.body;
-    const userId = req.userId; // Ambil dari middleware (konsisten dengan verifyToken)
+    const userId = req.userId;
 
     try {
         await Project.create({
-            // Pastikan masuk ke kolom 'project_name' sesuai Model
             project_name: projectName || project_name, 
             user_id: userId
         });
@@ -21,7 +18,6 @@ export const createProject = async(req, res) => {
     }
 };
 
-// --- READ PROJECTS (Dari Anda/HEAD) ---
 export const getUserProjects = async (req, res) => {
     try {
         const userId = req.userId; 
@@ -37,11 +33,72 @@ export const getUserProjects = async (req, res) => {
     }
 };
 
-// Placeholder untuk fitur detail & update (bisa diisi nanti dengan logika komponen)
-export const getProjectById = (req, res) => {};
-export const updateProject = (req, res) => {};
+export const getProjectById = async (req, res) => {
+    try {
+        const project = await Project.findOne({
+            where: {
+                id: req.params.id,
+                user_id: req.userId
+            },
+            include: [{
+                model: Component,
+                through: { attributes: ['order'] }
+            }],
+            order: [[Component, ProjectComponent, 'order', 'ASC']]
+        });
 
-// --- DELETE PROJECT (Dari Anda/HEAD) ---
+        if (!project) return res.status(404).json({ msg: "Proyek tidak ditemukan atau akses ditolak" });
+
+        res.status(200).json(project);
+    } catch (error) {
+        res.status(500).json({ msg: error.message });
+    }
+};
+
+export const updateProject = async (req, res) => {
+    try {
+        const projectId = req.params.id;
+        const userId = req.userId;
+        const { project_name, components } = req.body;
+
+        // Cek Project
+        const project = await Project.findOne({
+            where: { id: projectId, user_id: userId }
+        });
+
+        if (!project) return res.status(404).json({ msg: "Proyek tidak ditemukan" });
+
+        // Update Nama Project (jika ada)
+        if (project_name) {
+            await project.update({ project_name });
+        }
+
+        // Update Komponen
+        if (components && Array.isArray(components)) {
+            // Hapus semua komponen lama di proyek ini
+            await ProjectComponent.destroy({
+                where: { project_id: projectId }
+            });
+
+            const componentsData = components.map((comp, index) => ({
+                project_id: projectId,
+                component_id: comp.id,
+                order: index + 1
+            }));
+
+            // Simpan
+            if (componentsData.length > 0) {
+                await ProjectComponent.bulkCreate(componentsData);
+            }
+        }
+
+        res.status(200).json({ msg: "Proyek berhasil disimpan" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: "Gagal menyimpan proyek" });
+    }
+};
+
 export const deleteProject = async (req, res) => {
     try {
         const projectId = req.params.id;

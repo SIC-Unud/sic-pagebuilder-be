@@ -3,25 +3,22 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import db from './config/database.js';
 
-// Import Routes
 import authRoutes from './routes/auth.routes.js';
 import componentRoutes from './routes/component.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import projectRoutes from './routes/project.routes.js';
 import userRoutes from './routes/user.routes.js';
 
-// Import Models untuk sinkronisasi database
 import { User, Component, Project, ProjectComponent } from './models/index.js';
 
 dotenv.config();
-const app = express(); // PERBAIKAN: Tambahkan ()
+const app = express();
 
 const startServer = async () => {
     try {
         await db.authenticate();
         console.log('Database Connected...');
         
-        // Sinkronisasi model ke database
         await db.sync({ alter: true });
         console.log('Database Synchronized');
 
@@ -32,7 +29,6 @@ const startServer = async () => {
     app.use(cors({ credentials: true, origin: 'http://localhost:3000' })); // Sesuaikan origin frontend
     app.use(express.json());
 
-    // PERBAIKAN: Aktifkan semua routes
     app.use('/api/auth', authRoutes);
     app.use('/api/components', componentRoutes); 
     app.use('/api/projects', projectRoutes);     
@@ -40,7 +36,6 @@ const startServer = async () => {
     app.use('/api/dashboard', dashboardRoutes);  
 
     const PORT = process.env.PORT || 5000;
-    // PERBAIKAN: Gunakan backtick (`) untuk template literal
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
 
