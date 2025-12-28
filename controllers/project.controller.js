@@ -1,4 +1,6 @@
 import Project from '../models/ProjectModel.js';
+import Component from '../models/ComponentModel.js';
+import ProjectComponent from '../models/ProjectComponentModel.js';
 
 export const createProject = async(req, res) => {
     const { projectName, project_name } = req.body;
@@ -6,11 +8,14 @@ export const createProject = async(req, res) => {
 
     try {
         await Project.create({
-            project_name: projectName || project_name, 
+            project_name: projectName || project_name,
             user_id: userId
         });
 
-        res.status(201).json({msg:"Project berhasil dibuat!"});
+        res.status(201).json({
+            msg:"Project berhasil dibuat!",
+            projectId: newProject.id
+        });
 
     } catch (error) {
         console.log(error);
