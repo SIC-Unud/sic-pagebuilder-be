@@ -7,7 +7,7 @@ export const createProject = async(req, res) => {
     const userId = req.userId;
 
     try {
-        const newProject = await Project.create({
+        await Project.create({
             project_name: projectName || project_name,
             user_id: userId
         });
