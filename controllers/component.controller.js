@@ -1,6 +1,10 @@
 import Component from "../models/ComponentModel.js";
 
-// Get all components
+/**
+ * Mengambil semua daftar komponen UI yang tersedia.
+ * @route GET /api/components
+ * @access Public (User & Admin)
+ */
 export const getAllComponents = async (req, res) => {
   try {
     const components = await Component.findAll();
@@ -10,7 +14,11 @@ export const getAllComponents = async (req, res) => {
   }
 };
 
-// Get component by ID
+/**
+ * Mengambil detail satu komponen berdasarkan ID.
+ * @route GET /api/components/:id
+ * @access Public
+ */
 export const getComponentById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -26,7 +34,13 @@ export const getComponentById = async (req, res) => {
   }
 };
 
-// Create component
+/**
+ * Membuat komponen UI baru (Master Data).
+ * @route POST /api/components
+ * @access Admin Only
+ * @param {string} req.body.html_code - Kode HTML komponen
+ * @param {string} req.body.css_code - Kode CSS komponen
+ */
 export const createComponent = async (req, res) => {
   try {
     const { name, category, preview_url, html_code, css_code, js_code } = req.body;
@@ -46,7 +60,11 @@ export const createComponent = async (req, res) => {
   }
 };
 
-// Update component
+/**
+ * Mengupdate data komponen yang sudah ada.
+ * @route PATCH /api/components/:id
+ * @access Admin Only
+ */
 export const updateComponent = async (req, res) => {
   try {
     const { id } = req.params;
@@ -72,7 +90,11 @@ export const updateComponent = async (req, res) => {
   }
 };
 
-// Delete component
+/**
+ * Menghapus komponen dari database.
+ * @route DELETE /api/components/:id
+ * @access Admin Only
+ */
 export const deleteComponent = async (req, res) => {
   try {
     const { id } = req.params;
