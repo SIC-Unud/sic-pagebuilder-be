@@ -3,6 +3,10 @@ import db from "../config/database.js";
 
 const { DataTypes } = Sequelize;
 
+/**
+ * Model Project: Merepresentasikan tabel 'projects'.
+ * Satu user bisa memiliki banyak project (One-to-Many).
+ */
 const Project = db.define('projects', {
     project_name:{
         type: DataTypes.STRING,
@@ -10,7 +14,7 @@ const Project = db.define('projects', {
     },
     user_id:{
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false // Project harus punya pemilik
     }
 }, {
     freezeTableName: true

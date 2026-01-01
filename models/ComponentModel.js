@@ -3,19 +3,23 @@ import db from "../config/database.js";
 
 const { DataTypes } = Sequelize;
 
+/**
+ * Model Component: Master data elemen UI (Navbar, Hero, dll).
+ * Dikelola oleh Admin, digunakan oleh User.
+ */
 const Component = db.define('components', {
     name:{
         type: DataTypes.STRING,
         allowNull: false
     }, 
     category:{
-        type: DataTypes.STRING
+        type: DataTypes.STRING // Kategori: 'navbar', 'footer', 'card', dll.
     },
     preview_url:{
-        type: DataTypes.STRING
+        type: DataTypes.STRING // Link gambar preview (opsional)
     },
     html_code:{
-        type: DataTypes.TEXT,
+        type: DataTypes.TEXT, // Menggunakan TEXT untuk string panjang
         allowNull: false
     },
     css_code:{
@@ -26,7 +30,7 @@ const Component = db.define('components', {
     },
 }, {
     freezeTableName: true,
-    timestamps: false
+    timestamps: false // Tidak butuh createdAt/updatedAt untuk master data ini
 });
 
 export default Component;

@@ -3,6 +3,11 @@ import db from "../config/database.js";
 
 const { DataTypes } = Sequelize;
 
+/**
+ * Model Pivot (Penghubung): Many-to-Many antara Project dan Component.
+ * Menyimpan informasi komponen apa saja yang ada di dalam sebuah project,
+ * beserta urutannya (order).
+ */
 const ProjectComponent = db.define('project_components', {
     project_id:{
         type: DataTypes.INTEGER,
@@ -13,7 +18,7 @@ const ProjectComponent = db.define('project_components', {
         allowNull: false
     },
     order:{
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER, // Menentukan posisi urutan komponen di halaman
         allowNull: false
     }
 }, {
